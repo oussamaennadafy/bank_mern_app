@@ -1,6 +1,6 @@
 # bank MERN app
 
-This is the bank app created with mern stack
+This is a bank app created with mern stack
 
 ## Usage
 
