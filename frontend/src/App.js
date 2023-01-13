@@ -1,9 +1,22 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Header from './components/Header';
+import Dashboard from './pages/Dashboard';
+import Login from './pages/Login';
+import Register from './pages/Register';
+
 function App()
 {
   return (
-    <div>
-      <h1>bank app</h1>
-    </div>
+    <>
+      <Router className="container">
+        <Header />
+        <Routes>
+          <Route exact path='/' element={<Dashboard />}></Route>
+          <Route path='/login' element={<Login />}></Route>
+          <Route path='/register' element={<Register />}></Route>
+        </Routes>
+      </Router>
+    </>
   );
 }
 
