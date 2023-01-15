@@ -2,6 +2,10 @@ const asyncHandler = require('express-async-handler')
 
 const Transaction = require('../models/transactionModel')
 
+const { updateBalance, getBalance } = require('../controllers/userController')
+
+
+const User = require('../models/userModel')
 // @desc    Get transactions
 // @route   GET /api/transactions
 // @access  Private
@@ -17,16 +21,25 @@ const getTransactions = asyncHandler(async (req, res) =>
 // @access  Private
 const setTransaction = asyncHandler(async (req, res) =>
 {
-  if (!req.body.amount) {
+  const { amount, type } = req.body
+  if (!amount) {
     res.status(400)
     throw new Error('Please add a positive amount')
   }
 
   const transaction = await Transaction.create({
-    amount: req.body.amount,
-    type: req.body.type,
+    amount,
+    type,
     user: req.user.id,
   })
+
+  const user = await getBalance(req.user.id)
+
+
+  // update balance
+  if (type === 'send') updateBalance(req.user.id, user.balance - amount)
+  if (type === 'receive') updateBalance(req.user.id, user.balance + amount)
+
 
   res.status(200).json(transaction)
 })

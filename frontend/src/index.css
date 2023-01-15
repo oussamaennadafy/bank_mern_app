@@ -13,6 +13,7 @@ html {
 body {
   font-family: "Poppins", sans-serif;
   height: 100vh;
+  color: #444;
   background-color: #f3f3f3;
 }
 
@@ -377,6 +378,7 @@ h3 {
   border-radius: 1rem;
   padding: 3rem 4rem;
   color: #333;
+  text-align: start;
 }
 
 .operation--transfer {
@@ -411,7 +413,7 @@ h2 {
 
 /* Exceptions for interst */
 .form.form--loan {
-  grid-template-columns: 2.5fr 1fr 2.5fr;
+  grid-template-columns: 2fr 1fr;
 }
 .form__label--loan {
   grid-row: 2;

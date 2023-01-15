@@ -1,18 +1,19 @@
-import { useDispatch } from "react-redux";
-
-function Transaction({ transaction }) {
-  const dispatch = useDispatch();
-
+function Transaction({ transaction, index, arrayLength, formatter }) {
   return (
-    <div className="transaction">
-      <div>{new Date(transaction.createdAt).toLocaleString("en-US")}</div>
-      <h2>{transaction.text}</h2>
-      {/* <button
-        onClick={() => dispatch(deletetransaction(transaction._id))}
-        className="close"
+    <div className="movements__row">
+      <div
+        className={`movements__type movements__type--${
+          transaction.type === "send" ? "withdrawal" : "deposit"
+        }`}
       >
-        X
-      </button> */}
+        {`${arrayLength - index} ${
+          transaction.type === "send" ? "withdrawal" : "deposit"
+        }`}
+      </div>
+      <div className="movements__date">
+        {new Date(transaction.createdAt).toLocaleString()}
+      </div>
+      <div className="movements__value">{formatter(transaction.amount)}</div>
     </div>
   );
 }

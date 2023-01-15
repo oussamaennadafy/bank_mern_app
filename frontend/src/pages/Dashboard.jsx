@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import TransactionForm from "../components/TransactionForm";
@@ -46,26 +46,6 @@ function Dashboard() {
   }
 
   return (
-    // <>
-    //   <section classNameName='heading'>
-    //     <h1>Welcome {user && user.name}</h1>
-    //     <p>transactions Dashboard</p>
-    //   </section>
-
-    //   <RequestForm />
-
-    //   <section classNameName='content'>
-    //     {transactions.length > 0 ? (
-    //       <div classNameName='transactions'>
-    //         {transactions.map((goal) => (
-    //           <Transaction key={goal._id} goal={goal} />
-    //         ))}
-    //       </div>
-    //     ) : (
-    //       <h3>You have not set any transactions</h3>
-    //     )}
-    //   </section>
-    // </>
     <main className="app">
       <div className="balance">
         <div>
@@ -78,43 +58,19 @@ function Dashboard() {
       </div>
 
       <div className="movements">
-        {/* <div className="movements__row">
-          <div className="movements__type movements__type--deposit">
-            2 deposit
-          </div>
-          <div className="movements__date">3 days ago</div>
-          <div className="movements__value">4 000€</div>
-        </div> */}
         {transactions.length ? (
           transactions?.map((transaction, index, array) => (
-            <div className="movements__row">
-              <div
-                className={`movements__type movements__type--${
-                  transaction.type == "send" ? "withdrawal" : "deposit"
-                }`}
-              >
-                {`${array.length - index} ${
-                  transaction.type == "send" ? "withdrawal" : "deposit"
-                }`}
-              </div>
-              <div className="movements__date">
-                {new Date(transaction.createdAt).toLocaleString()}
-              </div>
-              <div className="movements__value">
-                {formatter(transaction.amount)}
-              </div>
-            </div>
+            <Transaction
+              transaction={transaction}
+              index={index}
+              arrayLength={array.length}
+              formatter={formatter}
+              key={transaction._id}
+            />
           ))
         ) : (
           <p className="no-data">no transactions yet</p>
         )}
-        {/* <div className="movements__row">
-          <div className="movements__type movements__type--withdrawal">
-            1 withdrawal
-          </div>
-          <div className="movements__date">24/01/2037</div>
-          <div className="movements__value">-378€</div>
-        </div> */}
       </div>
 
       <div className="summary">
@@ -127,9 +83,9 @@ function Dashboard() {
         {/* <button className="btn--sort"> &downarrow; SORT</button> */}
       </div>
 
-      <TransactionForm type="send" />
-
       <TransactionForm type="receive" />
+
+      <TransactionForm type="send" />
 
       <div className="operation operation--close">
         <h2>Close account</h2>

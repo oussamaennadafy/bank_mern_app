@@ -21,9 +21,11 @@ function RequestForm({ type }) {
 
   return (
     <div
-      className={`operation operation--${type == "send" ? "transfer" : "loan"}`}
+      className={`operation operation--${
+        type === "send" ? "transfer" : "loan"
+      }`}
     >
-      <h2>{type == "send" ? "Transfer money" : "Request loan"}</h2>
+      <h2>{type === "send" ? "Transfer money" : "Request loan"}</h2>
       <form onSubmit={onSubmit} className="form form--loan">
         <input
           step="any"
