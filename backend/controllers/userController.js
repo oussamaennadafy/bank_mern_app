@@ -6,7 +6,8 @@ const User = require('../models/userModel')
 // @desc    Register new user
 // @route   POST /api/users
 // @access  Public
-const registerUser = asyncHandler(async (req, res) => {
+const registerUser = asyncHandler(async (req, res) =>
+{
   const { name, email, password } = req.body
 
   if (!name || !email || !password) {
@@ -15,7 +16,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   // Check if user exists
-  const userExists = await User.findOne({ email })
+  const userExists = await User.findOne({ $or: [{ email }, { name }] })
 
   if (userExists) {
     res.status(400)
@@ -31,6 +32,7 @@ const registerUser = asyncHandler(async (req, res) => {
     name,
     email,
     password: hashedPassword,
+    balance: 0
   })
 
   if (user) {
@@ -38,6 +40,7 @@ const registerUser = asyncHandler(async (req, res) => {
       _id: user.id,
       name: user.name,
       email: user.email,
+      balance: user.balance,
       token: generateToken(user._id),
     })
   } else {
@@ -49,7 +52,8 @@ const registerUser = asyncHandler(async (req, res) => {
 // @desc    Authenticate a user
 // @route   POST /api/users/login
 // @access  Public
-const loginUser = asyncHandler(async (req, res) => {
+const loginUser = asyncHandler(async (req, res) =>
+{
   const { email, password } = req.body
 
   // Check for user email
@@ -60,6 +64,7 @@ const loginUser = asyncHandler(async (req, res) => {
       _id: user.id,
       name: user.name,
       email: user.email,
+      balance: user.balance,
       token: generateToken(user._id),
     })
   } else {
@@ -68,22 +73,22 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 })
 
-// @desc    Get user data
-// @route   GET /api/users/me
-// @access  Private
-const getMe = asyncHandler(async (req, res) => {
-  res.status(200).json(req.user)
+// update balance 
+const updateBalance = asyncHandler(async (req, res) =>
+{
+
 })
 
+
 // Generate JWT
-const generateToken = (id) => {
+const generateToken = (id) =>
+{
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
+    expiresIn: '6h',
   })
 }
 
 module.exports = {
   registerUser,
   loginUser,
-  getMe,
 }
