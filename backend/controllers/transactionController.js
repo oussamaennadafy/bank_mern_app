@@ -2,10 +2,11 @@ const asyncHandler = require('express-async-handler')
 
 const Transaction = require('../models/transactionModel')
 
-const { updateBalance, getBalance } = require('../controllers/userController')
+// const { updateBalance } = require('../controllers/userController')
 
 
 const User = require('../models/userModel')
+
 // @desc    Get transactions
 // @route   GET /api/transactions
 // @access  Private
@@ -33,12 +34,12 @@ const setTransaction = asyncHandler(async (req, res) =>
     user: req.user.id,
   })
 
-  const user = await getBalance(req.user.id)
+  const user = await User.findById(req.user.id).select('balance')
 
+  const newBalance = type === 'send' ? user.balance - amount : user.balance + amount
 
-  // update balance
-  if (type === 'send') updateBalance(req.user.id, user.balance - amount)
-  if (type === 'receive') updateBalance(req.user.id, user.balance + amount)
+  await User.findOneAndUpdate({ _id: req.user.id }, { balance: newBalance }, { new: true })
+
 
 
   res.status(200).json(transaction)

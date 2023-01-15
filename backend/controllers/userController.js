@@ -74,10 +74,11 @@ const loginUser = asyncHandler(async (req, res) =>
 })
 
 // get balance 
-const getBalance = asyncHandler(async (id) => await User.findById(id).select('balance'))
-
-// update balance 
-const updateBalance = asyncHandler(async (id, balance) => await User.findOneAndUpdate({ _id: id }, { balance }))
+const getBalance = asyncHandler(async (req, res) =>
+{
+  const user = await User.findById(req.user.id).select('balance')
+  res.json(user.balance)
+})
 
 
 // Generate JWT
@@ -91,6 +92,5 @@ const generateToken = (id) =>
 module.exports = {
   registerUser,
   loginUser,
-  updateBalance,
   getBalance
 }
